@@ -1,0 +1,69 @@
+<html>
+
+    <script>
+        var name = '游客';
+        var wsServer = 'ws://127.0.0.1:9502';
+        var websocket = new WebSocket(wsServer);
+        websocket.onopen = function (evt) {
+            console.log("Connected to WebSocket server.");
+        };
+
+        websocket.onclose = function (evt) {
+            console.log("Disconnected");
+        };
+
+        websocket.onmessage = function (evt) {
+            var data = JSON.parse(evt.data);
+            console.log('Retrieved data from server: ');
+
+            switch (data.type){
+                case '1':
+                    console.log(data.msg);
+                    break;
+
+                case '2':
+                    console.log(data.list);
+                    break;
+                case '3':
+                    console.log(data.msg);
+                    break;
+                default:
+                    console.log(data.msg);
+                    break;
+            }
+        };
+
+        websocket.onerror = function (evt, e) {
+            console.log('Error occured: ' + evt.data);
+        };
+
+        function login() {
+            name = document.getElementById('name').value;
+            websocket.send(JSON.stringify ({"type":"login","name":name}));
+        }
+
+        function sendMsg(){
+            var msg = document.getElementById('msg').value;
+            websocket.send(JSON.stringify ({"type":"msg","msg":msg,"name":name}));
+
+        }
+
+        function getOnline(){
+            websocket.send(JSON.stringify ({"type":"onlie"}));
+        }
+
+        window.setTimeout("getOnline()",3000);
+
+    </script>
+
+    <body>
+        <div>
+        <p>填写姓名:<input type = 'text' id = 'name' >  <a href="#" onclick = 'login()'> 提交</a></p>
+        </div>
+
+
+        <div>
+            <p>填写姓名:<input type = 'text' id = 'msg' >  <a href="#" onclick = 'sendMsg()'> 提交</a></p>
+        </div>
+    </body>
+</html>
