@@ -1,6 +1,8 @@
 <?php
 
 namespace Driver;
+use League\Flysystem\Exception;
+use phpDocumentor\Reflection\Types\Null_;
 
 /**
  * Class myRedis
@@ -28,9 +30,17 @@ class myRedis
 
         $this->timeout = isset($timeout) ? $timeout : 2.5;
 
-        $this->redis = new \Redis();
+        try {
 
-        $this->redis->connect($this->host, $this->port, $this->timeout);
+            $this->redis = new \Redis();
+
+            $this->redis->connect($this->host, $this->port, $this->timeout);
+
+        }catch (Exception $e){
+
+            $this->redis = Null;
+            writeLog($e->getMessage());
+        }
     }
 
 
