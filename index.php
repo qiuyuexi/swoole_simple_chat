@@ -6,6 +6,7 @@
 
     $m = isset($_GET['M']) ? $_GET['M'] : 'index';//控制器的方法
 
+    //writeLog($_GET['M']);
     $controller = ucwords($c) . 'Controller';
 
     //先判断控制器是否存在

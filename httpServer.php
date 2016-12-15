@@ -30,7 +30,19 @@ $server->on('request', function ($request, $response) use ($server) {
             });
 
             break;
+        case 'login':
 
+            $server->task("write", -1, function (swoole_server $server, $task_id, $data) use($request){
+
+                $c = ucwords($request[1]) . 'Controller';
+                $m = isset($request[2]) ? $request[2] : 'index';
+                $handle = new $c;
+                $handle->$m();
+
+                echo $task_id . '   ' . $data;
+                echo PHP_EOL;
+            });
+            break;
         case 'Base':
 
             $c = ucwords($request[1]) . 'Controller';
